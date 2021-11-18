@@ -1,0 +1,7 @@
+---
+- hosts: localhost
+  become: false
+  roles:
+    - role: base
+    - role: gnome
+    - role: tools

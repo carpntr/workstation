@@ -1,0 +1,25 @@
+---
+- name: base packages
+  become: true
+  apt:
+    state: present
+    name:
+      - curl
+      - git
+      - jq
+      - lm-sensors
+      - openssh-client
+      - openssh-server
+      - vim-gtk3
+      - wget
+      - wireguard-tools
+      - zip
+
+- name: change some system files
+  become: true
+  copy: src='{{item.src}}'  dest='{{item.dest}}' mode='0644' owner='root' group='root'
+  loop:
+    - { src: issue, dest: /etc/issue } # System banner
+    - { src: issue.net, dest: /etc/issue.net } # System banner - for network clients
+    - { src: motd, dest: /etc/motd } # User motd
+

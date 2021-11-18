@@ -1,0 +1,29 @@
+#!/bin/bash
+set -e
+display_usage() { 
+  echo "install a gnome extension from remote zip" 
+  echo "Usage: install-extension <https://path-to-zip-file>" 
+} 
+# Verify that the first parameter is an existing file with the ".zip" extension
+if [ -z $1 ]; then
+  display_usage
+  echo "[ERROR] no zip specified"
+  exit 1
+fi
+
+# grab extension
+ZIP="/tmp/tmp.zip"
+wget -qO- $1 > $ZIP
+
+# install it
+UUID=$(unzip -p $ZIP metadata.json | jq -r '.uuid')
+OUTDIR="$HOME/.local/share/gnome-shell/extensions/$UUID"
+mkdir -p $OUTDIR
+unzip -q -o $ZIP -d $OUTDIR
+gnome-extensions enable $UUID
+
+# cleanup
+rm $ZIP
+
+# probably want to restart gnome-shell after this
+#busctl --user call org.gnome.Shell /org/gnome/Shell org.gnome.Shell Eval s 'Meta.restart("Restarting…")' > /dev/null 2>&1

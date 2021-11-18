@@ -1,0 +1,66 @@
+---
+- name: set capslock behavior
+  shell: "gsettings set org.gnome.desktop.input-sources xkb-options \"['caps:escape']\""
+
+- name: install gnome-system-monitor dependencies
+  become: true
+  apt:
+    state: present
+    name:
+      - chrome-gnome-shell
+      - gir1.2-gtop-2.0
+      - gir1.2-nm-1.0
+      - gir1.2-clutter-1.0
+      - gnome-system-monitor
+
+- name: install gnome extensions
+  script: scripts/install-extension {{ item }}
+  with_items:
+    - https://extensions.gnome.org/extension-data/system-monitorparadoxxx.zero.gmail.com.v40.shell-extension.zip
+    - https://extensions.gnome.org/extension-data/dash-to-dockmicxgx.gmail.com.v69.shell-extension.zip
+    #- https://extensions.gnome.org/extension-data/wireguard-indicatoratareao.es.v4.shell-extension.zip
+
+- name: configure extensions
+  shell: "dconf write /org/gnome/shell/extensions/{{ item.ext }}/{{ item.setting }} {{ item.value }}"
+  with_items:
+    - { "ext": "system-monitor", "setting": "center-display", "value": "false"}
+    - { "ext": "system-monitor", "setting": "compact-display", "value": "false"}
+    - { "ext": "system-monitor", "setting": "cpu-graph-width", "value": "100"}
+    - { "ext": "system-monitor", "setting": "cpu-individual-cores", "value": "false"}
+    - { "ext": "system-monitor", "setting": "cpu-refresh-time", "value": "1600"}
+    - { "ext": "system-monitor", "setting": "cpu-show-text", "value": "false"}
+    - { "ext": "system-monitor", "setting": "disk-display", "value": "false"}
+    - { "ext": "system-monitor", "setting": "gpu-display", "value": "true"}
+    - { "ext": "system-monitor", "setting": "gpu-graph-width", "value": "50"}
+    - { "ext": "system-monitor", "setting": "gpu-show-menu", "value": "true"}
+    - { "ext": "system-monitor", "setting": "gpu-show-text", "value": "false"}
+    - { "ext": "system-monitor", "setting": "memory-show-text", "value": "false"}
+    - { "ext": "system-monitor", "setting": "net-graph-width", "value": "100"}
+    - { "ext": "system-monitor", "setting": "net-show-menu", "value": "true"}
+    - { "ext": "system-monitor", "setting": "net-show-text", "value": "false"}
+    - { "ext": "system-monitor", "setting": "net-style", "value": "\"'graph'\""}
+    - { "ext": "system-monitor", "setting": "show-tooltip", "value": "false"}
+    - { "ext": "system-monitor", "setting": "swap-display", "value": "false"}
+    - { "ext": "system-monitor", "setting": "thermal-display", "value": "true"}
+    - { "ext": "system-monitor", "setting": "thermal-fahrenheit-unit", "value": "false"}
+    - { "ext": "system-monitor", "setting": "thermal-graph-width", "value": "60"}
+    - { "ext": "system-monitor", "setting": "thermal-show-menu", "value": "true"}
+    - { "ext": "system-monitor", "setting": "thermal-show-text", "value": "false"}
+    - { "ext": "system-monitor", "setting": "thermal-style", "value": "\"'digit'\""}
+    - { "ext": "dash-to-dock", "setting": "animate-show-apps", "value": "false" }
+    - { "ext": "dash-to-dock", "setting": "custom-theme-shrink", "value": "true" }
+    - { "ext": "dash-to-dock", "setting": "dash-max-icon-size", "value": "36" }
+    - { "ext": "dash-to-dock", "setting": "dock-fixed", "value": "true" }
+    - { "ext": "dash-to-dock", "setting": "extend-height", "value": "true" }
+    - { "ext": "dash-to-dock", "setting": "height-fraction", "value": "0.90000000000000002" }
+    - { "ext": "dash-to-dock", "setting": "icon-size-fixed", "value": "true" }
+    - { "ext": "dash-to-dock", "setting": "multi-monitor", "value": "false" }
+    - { "ext": "dash-to-dock", "setting": "preferred-monitor", "value": "0" }
+
+
+- name: reload gnome-shell
+  shell: "busctl --user call org.gnome.Shell /org/gnome/Shell org.gnome.Shell Eval s 'Meta.restart(\"Restarting…\")' > /dev/null 2>&1"
+
+# TODO: custom shortcut bindings
+# something like this: https://askubuntu.com/a/1017580
+# or this: https://gitlab.com/tukusejssirs/lnx_scripts/-/blob/master/bash/functions/gshort.sh
