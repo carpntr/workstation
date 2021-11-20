@@ -37,12 +37,13 @@
   tags:
     - apps
 
-- name: config files for shell related tools
+- name: dot files
   copy: src=files/{{ item.src }} dest={{ item.dest }}
   with_items:
     - {'src': 'tmux.conf', 'dest': '$HOME/.tmux.conf'}
     - {'src': 'vimrc', 'dest': '$HOME/.vimrc'}
     - {'src': 'inputrc', 'dest': '$HOME/.inputrc'}
+    - {'src': 'bashrc', 'dest': '$HOME/.bashrc'}
   tags:
     - apps
 
