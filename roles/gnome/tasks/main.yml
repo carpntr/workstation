@@ -5,6 +5,12 @@
 - name: set mouse acceleration profile
   shell: "gsettings set org.gnome.desktop.peripherals.mouse accel-profile \"'flat'\""
 
+- name: set nautilus stuff
+  shell: "gsettings set org.gnome.nautilus.preferences default-folder-viewer 'list-view'"
+
+- name: set nautilus more nautilus stuff
+  shell: "gsettings set org.gnome.nautilus.list-view default-zoom-level 'small'"
+
 - name: install gnome-system-monitor dependencies
   become: true
   apt:

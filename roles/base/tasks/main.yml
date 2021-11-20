@@ -4,14 +4,13 @@
   apt:
     state: present
     name:
+      - apt-transport-https
       - curl
       - git
       - jq
       - lm-sensors
       - openssh-client
       - openssh-server
-      - tmux
-      - vim-gtk3
       - wget
       - wireguard-tools
       - zip
