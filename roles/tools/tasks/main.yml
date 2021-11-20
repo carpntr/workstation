@@ -6,3 +6,31 @@
     - {'src': 'vimrc', 'dest': '$HOME/.vimrc'}
     - {'src': 'inputrc', 'dest': '$HOME/.inputrc'}
 
+- name: dl setup
+  file:
+    state: directory
+    path: ~/downloads/rebuildme
+
+# hopefully can remove this section in the future
+- name: fetch desktop apps that need to be rebuilt
+  get_url:
+    url: '{{ item }}'
+    dest: ~/downloads/rebuildme
+  with_items:
+    - 'https://github.com/keeweb/keeweb/releases/download/v1.18.7/KeeWeb-1.18.7.linux.x64.deb'
+    - 'https://dl.discordapp.net/apps/linux/0.0.16/discord-0.0.16.deb'
+
+- name: rebuild packages that need libappindicator
+  script: scripts/replace-appindicator --cleanup {{ item }}
+  loop: "{{ lookup('fileglob','~/downloads/rebuildme/*.deb',wantlist=true) | reject('search','-fixed') | list }}"
+
+- name: install rebuilt packages
+  become: true
+  apt:
+    deb: '{{ item }}'
+  with_fileglob: '~/downloads/rebuildme/*-fixed.deb'
+
+
+- name: add repos for more apps
+  apt_repository:
+    repo: '{{ item }}'

@@ -1,0 +1,47 @@
+#!/bin/bash
+
+function usage() {
+    cat <<USAGE
+    Usage: $0 [options] <package.deb>
+    Options:
+        --install:  install after rebuild
+        --cleanup:  remove tmpfiles after
+USAGE
+    exit 1
+}
+
+INSTALL=false
+CLEANUP=false
+
+while [ "$1" != "" ]; do
+    case $1 in
+    --install)
+        INSTALL=true
+        ;;
+    --cleanup)
+        CLEANUP=true
+        ;;
+    *)
+        PKG=$1
+        NEWPKGNAME=`echo $PKG | awk 'BEGIN{FS=OFS="."}{NF--; print $0"-fixed.deb"}'`
+        ;;
+    esac
+    shift
+done
+
+TMP=/tmp/tmp-replace-appindicator
+rm -r $TMP
+mkdir -p $TMP
+dpkg-deb -x $PKG $TMP/unpacked
+dpkg-deb -e $PKG $TMP/unpacked/DEBIAN
+sed -i 's/libappindicator/libayatana-appindicator/g' $TMP/unpacked/DEBIAN/control
+dpkg -b $TMP/unpacked $NEWPKGNAME
+if [[ $INSTALL == true ]]; then
+    echo "installing $NEWPKGNAME"
+    sudo apt-get --yes --fix-broken install .$NEWPKGNAME || exit 1
+fi
+
+if [[ $CLEANUP == true ]]; then
+    echo "cleaning up $TMP"
+    rm -r $TMP
+fi

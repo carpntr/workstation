@@ -25,3 +25,4 @@ filetype plugin indent on
 set mouse=a		" Enable mouse usage (all modes)
 set belloff=all
 vnoremap <F8> "+y<CR>
+set ts=4 sw=4

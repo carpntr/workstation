@@ -10,6 +10,7 @@
       - lm-sensors
       - openssh-client
       - openssh-server
+      - tmux
       - vim-gtk3
       - wget
       - wireguard-tools
@@ -22,4 +23,23 @@
     - { src: issue, dest: /etc/issue } # System banner
     - { src: issue.net, dest: /etc/issue.net } # System banner - for network clients
     - { src: motd, dest: /etc/motd } # User motd
+
+- name: remove some default directories
+  file:
+    state: absent
+    path: "{{ item }}"
+  with_items:
+    - ~/Music
+    - ~/Pictures
+    - ~/Templates
+    - ~/Videos
+    - ~/Public
+    - ~/Documents
+    - ~/Downloads
+    - ~/Desktop
+
+- name: create downloads
+  file:
+    state: directory
+    path: ~/downloads
 

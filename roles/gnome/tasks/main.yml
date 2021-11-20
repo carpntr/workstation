@@ -2,6 +2,9 @@
 - name: set capslock behavior
   shell: "gsettings set org.gnome.desktop.input-sources xkb-options \"['caps:escape']\""
 
+- name: set mouse acceleration profile
+  shell: "gsettings set org.gnome.desktop.peripherals.mouse accel-profile \"'flat'\""
+
 - name: install gnome-system-monitor dependencies
   become: true
   apt:
