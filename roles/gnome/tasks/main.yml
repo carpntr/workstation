@@ -8,8 +8,11 @@
 - name: set nautilus stuff
   shell: "gsettings set org.gnome.nautilus.preferences default-folder-viewer 'list-view'"
 
-- name: set nautilus more nautilus stuff
+- name: more nautilus stuff
   shell: "gsettings set org.gnome.nautilus.list-view default-zoom-level 'small'"
+
+- name: workspaces should span all monitors
+  shell: "gsettings set org.gnome.mutter workspaces-only-on-primary false"
 
 - name: install gnome-system-monitor dependencies
   become: true
