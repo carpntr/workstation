@@ -9,6 +9,7 @@
       - git
       - jq
       - lm-sensors
+      - openresolv
       - openssh-client
       - openssh-server
       - wget
