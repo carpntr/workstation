@@ -29,6 +29,7 @@
     state: latest
     name: 
       - code
+      - htop
       - nextcloud-desktop
       - signal-desktop
       - spotify-client
