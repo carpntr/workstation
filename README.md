@@ -7,6 +7,9 @@ lots of stuff to add still
 ansible-playbook install.yml --ask-become-pass
 ```
 
-#### todos
-- firefox dev install
-
+### gnome gnotes
+Observe gnome settings changes in real time:
+```
+dconf watch /
+```
+Some things are easier to modify using gsettings, others dconf.
