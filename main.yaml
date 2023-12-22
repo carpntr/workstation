@@ -7,3 +7,9 @@
     - utils
     - brave
     - spotify
+    - docker
+  # tasks:
+  #   - include_role:
+  #       name: docker
+  #     tags:
+  #       - docker

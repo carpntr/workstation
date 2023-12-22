@@ -1,0 +1,45 @@
+---
+- name: Install packages to allow apt to use a repository over HTTPS
+  apt:
+    name:
+      - apt-transport-https
+      - ca-certificates
+      - curl
+      - gnupg
+      - lsb-release
+    state: present
+  tags:
+    - docker
+
+- name: Add Docker’s official GPG key
+  apt_key:
+    url: https://download.docker.com/linux/debian/gpg
+    state: present
+  tags:
+    - docker
+
+- name: Set up the stable repository
+  template:
+    src: docker.list.j2
+    dest: /etc/apt/sources.list.d/docker.list
+  tags:
+    - docker
+
+- name: Install Docker Engine
+  apt:
+    update_cache: yes
+    name:
+      - docker-ce
+      - docker-ce-cli
+      - containerd.io
+      - docker-buildx-plugin
+      - docker-compose-plugin
+    state: present
+  tags:
+    - docker
+
+- name: Add user to the docker group
+  user:
+    name: andrew
+    groups: docker
+    append: yes
