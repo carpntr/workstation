@@ -1,0 +1,24 @@
+---
+- name: add keys
+  become: true
+  apt_key:
+    url: "{{item}}"
+    state: present
+  loop:
+    - "https://download.spotify.com/debian/pubkey_7A3A762FAFD4A51F.gpg"
+
+- name: enable extra repos
+  become: true
+  apt_repository: filename='{{item.file}}' repo='{{item.repo}}' state=present
+  loop:
+    - {
+        file: "spotify",
+        repo: "deb http://repository.spotify.com stable non-free",
+      }
+
+- name: install spotterfy
+  become: true
+  apt:
+    state: latest
+    name:
+      - spotify-client

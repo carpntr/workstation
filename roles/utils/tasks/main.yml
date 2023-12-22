@@ -1,0 +1,26 @@
+---
+- name: install general utils
+  become: true
+  apt:
+    state: present
+    name:
+      - apt-transport-https
+      - curl
+      - git
+      - htop
+      - jq
+      - lm-sensors
+      - openssh-client
+      - openssh-server
+      - tmux
+      - vim-gtk3
+      - wget
+      - zip
+
+- name: dot files
+  copy: src=files/{{ item.src }} dest={{ item.dest }}
+  with_items:
+    - { "src": "tmux.conf", "dest": "$HOME/.tmux.conf" }
+    - { "src": "vimrc", "dest": "$HOME/.vimrc" }
+    - { "src": "inputrc", "dest": "$HOME/.inputrc" }
+    - { "src": "bashrc", "dest": "$HOME/.bashrc" }
