@@ -39,6 +39,7 @@
     - docker
 
 - name: Add user to the docker group
+  become: yes
   user:
     name: andrew
     groups: docker
